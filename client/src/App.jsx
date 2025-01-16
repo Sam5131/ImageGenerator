@@ -1,0 +1,22 @@
+import React from 'react'
+import {BrowserRouter, Link, Routes, Route}from 'react-router-dom';
+import {logo} from './assets';
+
+import {Home,CreatePost} from './pages'
+const App = () => {
+  return (
+    <BrowserRouter>
+      <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-[#e6ebf4]">
+        <link to='/'>
+          <img src ={logo} alt = 'logo' className="w-28 object-contain" />
+        </link>
+        
+        <link to ="/create-post" className='font-inter font-medium bg-[#6469ff] text-white px-4 py-2 rounded-md'>Create
+        </link>
+
+      </header>
+    </BrowserRouter>
+  )
+}
+
+export default App
