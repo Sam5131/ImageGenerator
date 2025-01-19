@@ -14,39 +14,62 @@ const CreatePost = () => {
   const [generatingImg, setgeneratingImg] = useState(false);
   const [loading, setloading] = useState(false);
 
-  const generateImage = async() => {
-    if(form.prompt){
-      try{
-        setgeneratingImg(true)
-        const response = await fetch('http://localhost:8080/api/v1/dalle',{
-          method: 'POST',
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setgeneratingImg(true);
+        const response = await fetch("http://localhost:8080/api/v1/dalle", {
+          method: "POST",
           headers: {
-            'Content-type':'application/json',
+            "Content-type": "application/json",
           },
-          body: JSON.stringify({prompt: form.prompt})
-        })
-        const data = await response.json()
-        setform({...form,photo:`data:image/jpeg;base64,${data.photo}`})
-      }catch(error){
-        alert(error)
-      }finally{
-        setgeneratingImg(false)
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+        const data = await response.json();
+        setform({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (error) {
+        alert(error);
+      } finally {
+        setgeneratingImg(false);
       }
-    }
-    else{
-      alert("Please enter a prompt")
+    } else {
+      alert("Please enter a prompt");
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.prompt && form.photo) {
+      setloading = true;
+      try {
+        const response = await fetch("http://locahost:8080/api/v1/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        });
+
+        await response.json()
+        navigate('/')
+      } catch (error) {
+        alert(error)
+      }finally{
+        setloading(false)
+      }
+    }else{
+      alert('Please enter a prompt')
+    }
+  };
 
   const handleChange = (e) => {
-      setform({...form, [e.target.name]:e.target.value})
-  }
+    setform({ ...form, [e.target.name]: e.target.value });
+  };
   const handleSupriseMe = () => {
     const randomPrompt = getRandomPrompt(form.prompt);
-    setform({...form, prompt: randomPrompt}) 
-  }
+    setform({ ...form, prompt: randomPrompt });
+  };
   return (
     <section className="max-w-7xl mx-auto">
       <div>
